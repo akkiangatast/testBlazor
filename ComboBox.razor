@@ -1,0 +1,40 @@
+﻿<div class="input-container">
+    <label class="label-editform" for="@Id">@Label</label>
+    <InputSelect Id="@Id"
+                 TValue="int"
+                 Value="@Value"
+                 ValueChanged="@ValueChanged"
+                 ValueExpression="@ValueExpression"
+                 class="input-editform">
+
+        @if (Items != null)
+        {
+            foreach (KeyValuePair<string, string> valuePair in Items?.OrderByDescending(key => key.Value))
+            {
+                <option value="@valuePair.Key">@valuePair.Value</option>
+            }
+
+        }
+    </InputSelect>
+    <ValidationMessage For="@ValueExpression" />
+</div>
+
+@code {
+
+    [Parameter] public string? Id { get; set; }
+    [Parameter] public string? Label { get; set; }
+    [Parameter] public int Value { get; set; }
+    [Parameter] public EventCallback<int> ValueChanged { get; set; }
+    [Parameter] public Expression<Func<int>>? ValueExpression { get; set; }
+    [Parameter] public Dictionary<string,string> Items { get; set; }
+
+
+    protected override void OnParametersSet()
+    {
+        if (string.IsNullOrEmpty(Id))
+        {
+            Id = Guid.NewGuid().ToString();
+        }
+    }
+
+}
